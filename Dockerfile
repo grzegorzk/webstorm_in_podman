@@ -1,7 +1,7 @@
 ARG GROUP_ID=1001
 ARG USER_ID=1001
 
-FROM docker.io/techgk/arch:latest AS firefox
+FROM docker.io/techgk/arch:latest
 
 RUN pacman -Sy --disable-download-timeout --noconfirm \
         git \
@@ -28,7 +28,8 @@ RUN groupadd -g $GROUP_ID webstorm \
 
 COPY docker_files/pulse-client.conf /etc/pulse/client.conf
 
-RUN su -l webstorm -c "cd /tmp && git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si --noconfirm" \
+RUN echo "default-server = unix:/run/user/${USER_ID}/pulse/native" >> /etc/pulse/client.conf \
+    && su -l webstorm -c "cd /tmp && git clone https://aur.archlinux.org/trizen.git && cd trizen && makepkg -si --noconfirm" \
     && su -l webstorm -c "trizen -S --disable-download-timeout --noconfirm webstorm" \
     && sed -i /opt/webstorm/bin/webstorm.sh -e 's/ || \[ ! -x "$JAVA_BIN" \]//g'
 

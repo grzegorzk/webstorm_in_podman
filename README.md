@@ -24,6 +24,11 @@ make build DOCKER=docker
 make run DOCKER=docker
 ```
 
+# glibc 2.33
+
+If you are on Arch Linux (or other distribution which is using glibc 2.33+) then very likely you will encounter problems when building the image.
+In such case please switch to `runtime = "runc"` in `/etc/containers/containers.conf`
+
 # Thanks
 
 People maintaining ArchLinux:
